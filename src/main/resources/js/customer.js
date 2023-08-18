@@ -1,7 +1,9 @@
 
 
 const API_CUSTOMER = "http://localhost:8080/api/customers"
-
+const API_DEPOSIT = "http://localhost:8080/api/deposits"
+const API_WITHDRAW = "http://localhost:8080/api/withdraws"
+const API_TRANSFER = "http://localhost:8080/api/transfers"
 
 function renderCustomer (){
     $.ajax({
@@ -25,17 +27,17 @@ function renderCustomer (){
       </button>
     </td>
     <td>
-      <button type="button" class="btn btn-outline-primary">
+      <button type="button" class="btn btn-outline-primary" onclick="showDeposit(${customer.id})" data-bs-toggle="modal" data-bs-target="#modalPlus">
         <i class="fas fa-plus"></i>
       </button>
     </td>
     <td>
-      <button type="button" class="btn btn-outline-warning">
+      <button type="button" class="btn btn-outline-warning" onclick="showWithdraw(${customer.id})" data-bs-toggle="modal" data-bs-target="#modalWithdraw">
         <i class="fas fa-minus"></i>
       </button>
     </td>
     <td>
-      <button type="button" class="btn btn-outline-primary">
+      <button type="button" class="btn btn-outline-primary" onclick="showTransfer(${customer.id})" data-bs-toggle="modal" data-bs-target="#modalTransfer">
         <i class="fas fa-exchange-alt"></i>
       </button>
     </td>
@@ -74,54 +76,56 @@ function createCustomer(){
         },
         data: JSON.stringify(customer)
     }).done((data) => {
-        console.log(data)
-        const str = renderNewCustomer(data);
-        $('#customer').prepend(str);
-        $('#closeCreate').click();
-
+        // const str = renderNewCustomer(data);
+        // $('#customer').prepend(str);
+        document.getElementById("formCreate").reset();
+        document.getElementById("closeCreate").click();
+        renderCustomer();
+        webToast.Success({
+            status:'Tạo Tài Khoản Thành Công ',
+            message:'',
+            delay: 5000
+        });
     })
+
     }
-function showModalCreate(){
-    let inputFields = $("#modalCreate").find("input");
-    inputFields.val("");
-}
-const renderNewCustomer = (customer) => {
-    return `
-               <tr id="row-${customer.id}">
-    <th>${customer.id}</th>
-    <td>${customer.fullName}</td>
-    <td>${customer.email}</td>
-    <td>${customer.phone}</td>
-    <td>${customer.address}</td>
-    <td>${customer.balance}</td>
-    <td>
-      <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalUpdate">
-        <i class="fas fa-user-edit"></i>
-      </button>
-    </td>
-    <td>
-      <button type="button" class="btn btn-outline-primary">
-        <i class="fas fa-plus"></i>
-      </button>
-    </td>
-    <td>
-      <button type="button" class="btn btn-outline-warning">
-        <i class="fas fa-minus"></i>
-      </button>
-    </td>
-    <td>
-      <button type="button" class="btn btn-outline-primary">
-        <i class="fas fa-exchange-alt"></i>
-      </button>
-    </td>
-    <td>
-      <button type="button" class="btn btn-outline-danger">
-        <i class="fas fa-user-slash"></i>
-      </button>
-    </td>
-  </tr>
-            `;
-}
+// const renderNewCustomer = (customer) => {
+//     return `
+//                <tr id="row-${customer.id}">
+//     <th>${customer.id}</th>
+//     <td>${customer.fullName}</td>
+//     <td>${customer.email}</td>
+//     <td>${customer.phone}</td>
+//     <td>${customer.address}</td>
+//     <td>${customer.balance}</td>
+//     <td>
+//       <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalUpdate">
+//         <i class="fas fa-user-edit"></i>
+//       </button>
+//     </td>
+//     <td>
+//       <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalPlus">
+//         <i class="fas fa-plus"></i>
+//       </button>
+//     </td>
+//     <td>
+//       <button type="button" class="btn btn-outline-warning">
+//         <i class="fas fa-minus"></i>
+//       </button>
+//     </td>
+//     <td>
+//       <button type="button" class="btn btn-outline-primary">
+//         <i class="fas fa-exchange-alt"></i>
+//       </button>
+//     </td>
+//     <td>
+//       <button type="button" class="btn btn-outline-danger">
+//         <i class="fas fa-user-slash"></i>
+//       </button>
+//     </td>
+//   </tr>
+//             `;
+// }
 
 function showUpdateCustomer(id){
     $.ajax({
@@ -145,7 +149,6 @@ function updateCustomer(id){
         phone : document.getElementById("phoneUp").value,
         address : document.getElementById("addressUp").value
     }
-    console.log(id)
     $.ajax({
         url : API_CUSTOMER + "/" + id,
         method : "PUT",
@@ -162,6 +165,11 @@ function updateCustomer(id){
         columns[2].innerText = data.phone;
         columns[3].innerText = data.address;
         $("#closeUpdate").click();
+        webToast.Success({
+            status:'Sửa Thông Tin Thành Công ',
+            message:'',
+            delay: 5000
+        });
 
     })
 }

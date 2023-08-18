@@ -6,12 +6,14 @@ import com.example.banking.repository.CustomerRepository;
 import com.example.banking.util.AppUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class CustomerService {
 
     private  final CustomerRepository customerRepository;

@@ -1,5 +1,6 @@
 package com.example.banking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,8 +24,21 @@ public class Customer {
     private String address;
     private BigDecimal balance;
 
-    @OneToMany(mappedBy = "sender")
-    private List<Withdraws> withdrawsList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "customerWithdraws")
+    private List<Withdraw> withdrawsList;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "customerDep")
+    private List<Deposit> deposits;
+
+    @OneToMany(mappedBy = "customerSender")
+    @JsonIgnore
+    private List<Transfer> transferSender;
+
+    @OneToMany(mappedBy = "customerReceiver")
+    private List<Transfer> transferReceiver;
+
 
 }
 

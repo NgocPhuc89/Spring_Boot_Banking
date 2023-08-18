@@ -12,16 +12,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Withdraws {
+public class Deposit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private BigDecimal transactionAmount;
-
-    private LocalDateTime time;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private Customer sender;
+    private Customer customerDep;
 
+    private BigDecimal depositAmount;
+
+    private LocalDateTime depositTime;
 }
