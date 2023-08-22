@@ -4,7 +4,7 @@ function showTransfer(id){
     let columns = row.querySelectorAll("td");
     document.getElementById("fullNameTransfer").value = columns[0].innerText;
     document.getElementById("emailSender").value = columns[1].innerText;
-    document.getElementById("oldBalanceTransfer").value = columns[4].innerText;
+    document.getElementById("oldBalanceTransfer").value = columns[3].innerText;
 
     document.getElementById("selectName").addEventListener("change", function() {
         const selectedOption = this.options[this.selectedIndex];

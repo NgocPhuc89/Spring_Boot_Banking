@@ -21,8 +21,11 @@ public class Customer {
     private String fullName;
     private String email;
     private String phone;
-    private String address;
     private BigDecimal balance;
+
+    @OneToOne
+    @JoinColumn(name = "location_region_id", referencedColumnName = "id")
+    private LocationRegion locationRegion ;
 
     @JsonIgnore
     @OneToMany(mappedBy = "customerWithdraws")

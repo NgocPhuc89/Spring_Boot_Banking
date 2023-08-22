@@ -2,7 +2,9 @@ package com.example.banking.service;
 
 import com.example.banking.dto.CustomerSaveRequest;
 import com.example.banking.model.Customer;
+import com.example.banking.model.LocationRegion;
 import com.example.banking.repository.CustomerRepository;
+import com.example.banking.repository.LocationRegionRepository;
 import com.example.banking.util.AppUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.List;
 public class CustomerService {
 
     private  final CustomerRepository customerRepository;
+    private final LocationRegionRepository locationRegionRepository;
 
     public List<Customer> findAll(){
         return customerRepository.findAll();
@@ -24,6 +27,11 @@ public class CustomerService {
 
     public Customer create (CustomerSaveRequest customerSaveRequest ){
         Customer customer = AppUtils.mapper.map(customerSaveRequest,Customer.class);
+
+        LocationRegion locationRegion = customerSaveRequest.getLocationRegion();
+        locationRegionRepository.save(locationRegion);
+
+        customer.setLocationRegion(locationRegion);
         customer.setBalance(new BigDecimal(0));
         customerRepository.save(customer);
         return customer;
@@ -31,7 +39,13 @@ public class CustomerService {
 
     public Customer update (CustomerSaveRequest customerSaveRequest, Long id ){
         Customer customer = AppUtils.mapper.map(customerSaveRequest,Customer.class);
+
+        LocationRegion locationRegion = customerSaveRequest.getLocationRegion();
+        locationRegionRepository.save(locationRegion);
+
         customer.setId(id);
+        customer.setLocationRegion(locationRegion);
+
         Customer oldCustomer = findID(id);
         customer.setBalance( oldCustomer.getBalance());
         customerRepository.save(customer);
